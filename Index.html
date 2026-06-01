@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nails by Feriyelle - بطاقة الولاء</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            text-align: center;
+            color: #764ba2;
+            margin-bottom: 20px;
+        }
+        
+        .logo h1 {
+            font-size: 2.2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .logo p {
+            font-size: 1rem;
+            opacity: 0.9;
+            color: #333;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .card-title {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px;
+            background: #f0f0f0;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            background: linear-gradient(135deg, #ff9a9e 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .tab:hover:not(.active) {
+            background: #e0e0e0;
+        }
+        
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        /* Client Card */
+        .loyalty-card {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            color: #333;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .loyalty-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .salon-name {
+            font-size: 1.6rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .client-name {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .qr-container {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            display: inline-block;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .points-display {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #764ba2;
+            margin: 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .points-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .progress-container {
+            background: rgba(255,255,255,0.5);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .progress-bar {
+            background: white;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #ff9a9e, #764ba2);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        
+        .reward-info {
+            font-size: 0.85rem;
+            color: #555;
+        }
+        
+        .reward-highlight {
+            color: #764ba2;
+            font-weight: bold;
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #ff9a9e;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #ff9a9e 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 154, 158, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        
+        /* Admin Panel */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-box {
+            background: linear-gradient(135deg, #ff9a9e 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        
+        .client-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .client-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .client-info h4 {
+            color: #333;
+            margin-bottom: 3px;
+        }
+        
+        .client-info p {
+            color: #666;
+            font-size: 0.85rem;
+        }
+        
+        .client-points {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #764ba2;
+        }
+        
+        .action-btns {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .action-btns .btn {
+            flex: 1;
+            padding: 8px;
+            font-size: 0.85rem;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .modal-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .scan-area {
+            background: #f0f0f0;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 3px dashed #ff9a9e;
+        }
+        
+        .scan-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            z-index: 2000;
+            transform: translateX(400px);
+            transition: transform 0.3s;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        
+        .notification.error {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        /* History */
+        .history-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border-right: 4px solid #ff9a9e;
+        }
+        
+        .history-date {
+            font-size: 0.8rem;
+            color: #888;
+        }
+        
+        .history-action {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .points-added {
+            color: #11998e;
+        }
+        
+        .points-redeemed {
+            color: #eb3349;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0;
+            }
+            
+            .card {
+                padding: 20px;
+                border-radius: 15px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <h1>💅 Nails by Feriyelle</h1>
+            <p>نظام الولاء الرقمي - Carte de Fidélité Digitale</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showSection('client')">👤 فضاء العميل</button>
+            <button class="tab" onclick="showSection('admin')">⚙️ فضاء الإدارة</button>
+        </div>
+        
+        <!-- CLIENT SECTION -->
+        <div id="client-section" class="section active">
+            <!-- Login/Register -->
+            <div id="client-auth" class="card">
+                <h2 class="card-title">🎯 دخول العميل</h2>
+                <div class="form-group">
+                    <label>الاسم الكامل / Nom complet</label>
+                    <input type="text" id="client-name" placeholder="مثال: فريال التونسية">
+                </div>
+                <div class="form-group">
+                    <label>رقم الهاتف / Téléphone</label>
+                    <input type="tel" id="client-phone" placeholder="مثال: 20 123 456">
+                </div>
+                <button class="btn btn-primary" onclick="registerClient()">📱 إنشاء بطاقة الولاء</button>
+            </div>
+            
+            <!-- Client Card (Hidden initially) -->
+            <div id="client-card" class="card hidden">
+                <div class="loyalty-card">
+                    <div class="salon-name">💅 Nails by Feriyelle</div>
+                    <div class="client-name" id="display-client-name">فريال</div>
+                    <div class="qr-container">
+                        <div id="qrcode"></div>
+                    </div>
+                    <div class="points-display" id="display-points">0</div>
+                    <div class="points-label">نقطة ولاء / Points de fidélité</div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <div class="reward-info">
+                            🎯 اجمع <span class="reward-highlight">50,000</span> نقطة واحصل على <span class="reward-highlight">-50%</span> تخفيض!<br>
+                            <small>كل 10 د = 1 نقطة / 10 DT = 1 point</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <h3 style="margin-bottom: 15px; color: #333;">📜 سجل العمليات / Historique</h3>
+                    <div id="client-history"></div>
+                </div>
+                
+                <button class="btn btn-danger" onclick="logoutClient()" style="margin-top: 20px;">🚪 خروج</button>
+            </div>
+        </div>
+        
+        <!-- ADMIN SECTION -->
+        <div id="admin-section" class="section">
+            <!-- Admin Login -->
+            <div id="admin-auth" class="card">
+                <h2 class="card-title">🔐 دخول الإدارة</h2>
+                <div class="form-group">
+                    <label>كلمة المرور / Mot de passe</label>
+                    <input type="password" id="admin-password" placeholder="أدخل كلمة المرور">
+                </div>
+                <button class="btn btn-primary" onclick="loginAdmin()">🔓 دخول</button>
+            </div>
+            
+            <!-- Admin Panel (Hidden initially) -->
+            <div id="admin-panel" class="hidden">
+                <div class="card">
+                    <h2 class="card-title">📊 إحصائيات / Statistiques</h2>
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-number" id="total-clients">0</div>
+                            <div class="stat-label">عدد العملاء / Clients</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number" id="total-points">0</div>
+                            <div class="stat-label">إجمالي النقاط / Points</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2 class="card-title">➕ إضافة نقاط / Ajouter des points</h2>
+                    <div class="form-group">
+                        <label>اختر العميل / Choisir client</label>
+                        <select id="client-select">
+                            <option value="">-- اختر عميل --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>المبلغ بالدنانير / Montant en DT (كل 10 د = 1 نقطة)</label>
+                        <input type="number" id="amount-input" placeholder="مثال: 100" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>النقاط المحتسبة: <span id="calculated-points" style="color: #764ba2; font-weight: bold;">0</span></label>
+                    </div>
+                    <button class="btn btn-success" onclick="addPoints()">✅ إضافة النقاط</button>
+                </div>
+                
+                <div class="card">
+                    <h2 class="card-title">🎁 استبدال خصم 50% / Utiliser -50%</h2>
+                    <div class="form-group">
+                        <label>اختر العميل / Choisir client</label>
+                        <select id="redeem-client-select">
+                            <option value="">-- اختر عميل --</option>
+                        </select>
+                    </div>
+                    <div id="redeem-info" style="background: #fff3cd; padding: 15px; border-radius: 10px; margin-bottom: 15px; display: none;">
+                        <p>نقاط العميل: <strong id="redeem-client-points">0</strong></p>
+                        <p style="color: #856404;">⚠️ يحتاج 50,000 نقطة للحصول على -50%</p>
+                    </div>
+                    <button class="btn btn-warning" onclick="redeemDiscount()">🎉 استبدال الخصم</button>
+                </div>
+                
+                <div class="card">
+                    <h2 class="card-title">👥 قائمة العملاء / Liste des clients</h2>
+                    <div class="client-list" id="client-list"></div>
+                </div>
+                
+                <button class="btn btn-danger" onclick="logoutAdmin()">🚪 خروج</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- QR Scanner Modal -->
+    <div id="scan-modal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title">📷 مسح QR Code</h3>
+            <div class="scan-area">
+                <div class="scan-icon">📱</div>
+                <p>ضع QR Code داخل الإطار</p>
+            </div>
+            <button class="btn" onclick="closeModal()">❌ إغلاق</button>
+        </div>
+    </div>
+    
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+    
+    <script>
+        // Data Storage
+        let clients = JSON.parse(localStorage.getItem('nails_feriyelle_clients')) || {};
+        let currentClient = null;
+        let isAdmin = false;
+        const ADMIN_PASSWORD = 'feriel2024';
+        const POINTS_RATE = 10;
+        const DISCOUNT_THRESHOLD = 50000;
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedClient = localStorage.getItem('nails_feriyelle_current_client');
+            if (savedClient) {
+                currentClient = savedClient;
+                showClientCard();
+            }
+            
+            document.getElementById('amount-input').addEventListener('input', function() {
+                const amount = parseFloat(this.value) || 0;
+                const points = Math.floor(amount / POINTS_RATE);
+                document.getElementById('calculated-points').textContent = points;
+            });
+            
+            document.getElementById('redeem-client-select').addEventListener('change', function() {
+                const clientId = this.value;
+                if (clientId && clients[clientId]) {
+                    document.getElementById('redeem-client-points').textContent = clients[clientId].points;
+                    document.getElementById('redeem-info').style.display = 'block';
+                } else {
+                    document.getElementById('redeem-info').style.display = 'none';
+                }
+            });
+        });
+        
+        function showSection(section) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            
+            if (section === 'client') {
+                document.querySelectorAll('.tab')[0].classList.add('active');
+                document.getElementById('client-section').classList.add('active');
+            } else {
+                document.querySelectorAll('.tab')[1].classList.add('active');
+                document.getElementById('admin-section').classList.add('active');
+            }
+        }
+        
+        function registerClient() {
+            const name = document.getElementById('client-name').value.trim();
+            const phone = document.getElementById('client-phone').value.trim();
+            
+            if (!name || !phone) {
+                showNotification('❌ يرجى ملء جميع الحقول', 'error');
+                return;
+            }
+            
+            const clientId = 'client_' + Date.now();
+            clients[clientId] = {
+                id: clientId,
+                name: name,
+                phone: phone,
+                points: 0,
+                history: [],
+                createdAt: new Date().toLocaleString('ar-TN')
+            };
+            
+            saveData();
+            currentClient = clientId;
+            localStorage.setItem('nails_feriyelle_current_client', clientId);
+            showClientCard();
+            showNotification('✅ تم إنشاء البطاقة بنجاح!', 'success');
+        }
+        
+        function showClientCard() {
+            document.getElementById('client-auth').classList.add('hidden');
+            document.getElementById('client-card').classList.remove('hidden');
+            
+            const client = clients[currentClient];
+            document.getElementById('display-client-name').textContent = client.name;
+            document.getElementById('display-points').textContent = client.points.toLocaleString('ar-TN');
+            
+            document.getElementById('qrcode').innerHTML = '';
+            new QRCode(document.getElementById('qrcode'), {
+                text: client.id,
+                width: 150,
+                height: 150,
+                colorDark: '#764ba2',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H
+            });
+            
+            const progress = Math.min((client.points / DISCOUNT_THRESHOLD) * 100, 100);
+            document.getElementById('progress-fill').style.width = progress + '%';
+            
+            updateClientHistory();
+        }
+        
+        function updateClientHistory() {
+            const client = clients[currentClient];
+            const historyContainer = document.getElementById('client-history');
+            
+            if (client.history.length === 0) {
+                historyContainer.innerHTML = '<p style="text-align: center; color: #888;">لا توجد عمليات بعد</p>';
+                return;
+            }
+            
+            historyContainer.innerHTML = client.history.slice().reverse().map(h => `
+                <div class="history-item">
+                    <div class="history-action">${h.action}</div>
+                    <div class="history-date">${h.date}</div>
+                    <div class="${h.type === 'add' ? 'points-added' : 'points-redeemed'}">
+                        ${h.type === 'add' ? '+' : '-'}${h.points} نقطة
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function logoutClient() {
+            currentClient = null;
+            localStorage.removeItem('nails_feriyelle_current_client');
+            document.getElementById('client-auth').classList.remove('hidden');
+            document.getElementById('client-card').classList.add('hidden');
+            document.getElementById('client-name').value = '';
+            document.getElementById('client-phone').value = '';
+        }
+        
+        function loginAdmin() {
+            const password = document.getElementById('admin-password').value;
+            if (password === ADMIN_PASSWORD) {
+                isAdmin = true;
+                document.getElementById('admin-auth').classList.add('hidden');
+                document.getElementById('admin-panel').classList.remove('hidden');
+                updateAdminPanel();
+                showNotification('✅ مرحباً Feriyelle! تم الدخول بنجاح', 'success');
+            } else {
+                showNotification('❌ كلمة المرور خاطئة', 'error');
+            }
+        }
+        
+        function logoutAdmin() {
+            isAdmin = false;
+            document.getElementById('admin-auth').classList.remove('hidden');
+            document.getElementById('admin-panel').classList.add('hidden');
+            document.getElementById('admin-password').value = '';
+        }
+        
+        function update <h2 class="card-title">👥 قائمة العملاء / Liste des clients</h2>
+                    <div class="client-list" id="client-list"></div>
+                </div>
+                
+                <button class="btn btn-danger" onclick="logoutAdmin()">🚪 خروج</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- QR Scanner Modal -->
+    <div id="scan-modal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title">📷 مسح QR Code</h3>
+            <div class="scan-area">
+                <div class="scan-icon">📱</div>
+                <p>ضع QR Code داخل الإطار</p>
+            </div>
+            <button class="btn" onclick="closeModal()">❌ إغلاق</button>
+        </div>
+    </div>
+    
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+    
+    <script>
+        // Data Storage
+        let clients = JSON.parse(localStorage.getItem('nails_feriyelle_clients')) || {};
+        let currentClient = null;
+        let isAdmin = false;
+        const ADMIN_PASSWORD = 'feriel2024';
+        const POINTS_RATE = 10;
+        const DISCOUNT_THRESHOLD = 50000;
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedClient = localStorage.getItem('nails_feriyelle_current_client');
+            if (savedClient) {
+                currentClient = savedClient;
+                showClientCard();
+            }
+            
+            document.getElementById('amount-input').addEventListener('input', function() {
+                const amount = parseFloat(this.value) || 0;
+                const points = Math.floor(amount / POINTS_RATE);
+                document.getElementById('calculated-points').textContent = points;
+            });
+            
+            document.getElementById('redeem-client-select').addEventListener('change', function() {
+                const clientId = this.value;
+                if (clientId && clients[clientId]) {
+                    document.getElementById('redeem-client-points').textContent = clients[clientId].points;
+                    document.getElementById('redeem-info').style.display = 'block';
+                } else {
+                    document.getElementById('redeem-info').style.display = 'none';
+                }
+            });
+        });
+        
+        function showSection(section) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            
+            if (section === 'client') {
+                document.querySelectorAll('.tab')[0].classList.add('active');
+                document.getElementById('client-section').classList.add('active');
+            } else {
+                document.querySelectorAll('.tab')[1].classList.add('active');
+                document.getElementById('admin-section').classList.add('active');
+            }
+        }
+        
+        function registerClient() {
+            const name = document.getElementById('client-name').value.trim();
+            const phone = document.getElementById('client-phone').value.trim();
+            
+            if (!name || !phone) {
+                showNotification('❌ يرجى ملء جميع الحقول', 'error');
+                return;
+            }
+            
+            const clientId = 'client_' + Date.now();
+            clients[clientId] = {
+                id: clientId,
+                name: name,
+                phone: phone,
+                points: 0,
+                history: [],
+                createdAt: new Date().toLocaleString('ar-TN')
+            };
+            
+            saveData();
+            currentClient = clientId;
+            localStorage.setItem('nails_feriyelle_current_client', clientId);
+            showClientCard();
+            showNotification('✅ تم إنشاء البطاقة بنجاح!', 'success');
+        }
+        
+        function showClientCard() {
+            document.getElementById('client-auth').classList.add('hidden');
+            document.getElementById('client-card').classList.remove('hidden');
+            
+            const client = clients[currentClient];
+            document.getElementById('display-client-name').textContent = client.name;
+            document.getElementById('display-points').textContent = client.points.toLocaleString('ar-TN');
+            
+            document.getElementById('qrcode').innerHTML = '';
+            new QRCode(document.getElementById('qrcode'), {
+                text: client.id,
+                width: 150,
+                height: 150,
+                colorDark: '#764ba2',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H
+            });
+            
+            const progress = Math.min((client.points / DISCOUNT_THRESHOLD) * 100, 100);
+            document.getElementById('progress-fill').style.width = progress + '%';
+            
+            updateClientHistory();
+        }
+        
+        function updateClientHistory() {
+            const client = clients[currentClient];
+            const historyContainer = document.getElementById('client-history');
+            
+            if (client.history.length === 0) {
+                historyContainer.innerHTML = '<p style="text-align: center; color: #888;">لا توجد عمليات بعد</p>';
+                return;
+            }
+            
+            historyContainer.innerHTML = client.history.slice().reverse().map(h => `
+                <div class="history-item">
+                    <div class="history-action">${h.action}</div>
+                    <div class="history-date">${h.date}</div>
+                    <div class="${h.type === 'add' ? 'points-added' : 'points-redeemed'}">
+                        ${h.type === 'add' ? '+' : '-'}${h.points} نقطة
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function logoutClient() {
+            currentClient = null;
+            localStorage.removeItem('nails_feriyelle_current_client');
+            document.getElementById('client-auth').classList.remove('hidden');
+            document.getElementById('client-card').classList.add('hidden');
+            document.getElementById('client-name').value = '';
+            document.getElementById('client-phone').value = '';
+        }
+        
+        function loginAdmin() {
+            const password = document.getElementById('admin-password').value;
+            if (password === ADMIN_PASSWORD) {
+                isAdmin = true;
+                document.getElementById('admin-auth').classList.add('hidden');
+                document.getElementById('admin-panel').classList.remove('hidden');
+                updateAdminPanel();
+                showNotification('✅ مرحباً Feriyelle! تم الدخول بنجاح', 'success');
+            } else {
+                showNotification('❌ كلمة المرور خاطئة', 'error');
+            }
+        }
+        
+        function logoutAdmin() {
+            isAdmin = false;
+            document.getElementById('admin-auth').classList.remove('hidden');
+            document.getElementById('admin-panel').classList.add('hidden');
+            document.getElementById('admin-password').value = '';
+        }
+        
+        function updateAdminPanel() {
+            const totalClients = Object.keys(clients).length;
+            const totalPoints = Object.values(clients).reduce((sum, c) => sum + c.points, 0);
+            
+            document.getElementById('total-clients').textContent = totalClients;
+            document.getElementById('total-points').textContent = totalPoints.toLocaleString('ar-TN');
+            
+            updateClientSelects();
+            updateClientList();
+        }
+        
+        function updateClientSelects() {
+            const selects = ['client-select', 'redeem-client-select'];
+            selects.forEach(selectId => {
+                const select = document.getElementById(selectId);
+                select.innerHTML = '<option value="">-- اختر عميل --</option>';
+                
+                Object.values(clients).forEach(client => {
+                    const option = document.createElement('option');
+                    option.value = client.id;
+                    option.textContent = `${client.name} (${client.phone}) - ${client.points} نقطة`;
+                    select.appendChild(option);
+                });
+            });
+        }
+        
+        function updateClientList() {
+            const list = document.getElementById('client-list');
+            
+            if (Object.keys(clients).length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #888;">لا يوجد عملاء مسجلين</p>';
+                return;
+            }
+            
+            list.innerHTML = Object.values(clients).map(client => `
+                <div class="client-item">
+                    <div class="client-info">
+                        <h4>${client.name}</h4>
+                        <p>📱 ${client.phone}</p>
+                        <p>📅 ${client.createdAt}</p>
+                    </div>
+                    <div class="client-points">${client.points.toLocaleString('ar-TN')} نقطة</div>
+                </div>
+            `).join('');
+        }
+        
+        function addPoints() {
+            const clientId = document.getElementById('client-select').value;
+            const amount = parseFloat(document.getElementById('amount-input').value) || 0;
+            
+            if (!clientId) {
+                showNotification('❌ اختر عميل أولاً', 'error');
+                return;
+            }
+            
+            if (amount <= 0) {
+                showNotification('❌ أدخل مبلغ صحيح', 'error');
+                return;
+            }
+            
+            const points = Math.floor(amount / POINTS_RATE);
+            clients[clientId].points += points;
+            clients[clientId].history.push({
+                action: `شراء بقيمة ${amount} د.ت`,
+                points: points,
+                type: 'add',
+                date: new Date().toLocaleString('ar-TN')
+            });
+            
+            saveData();
+            updateAdminPanel();
+            
+            if (currentClient === clientId) {
+                showClientCard();
+            }
+            
+            document.getElementById('amount-input').value = '';
+            document.getElementById('calculated-points').textContent = '0';
+            showNotification(`✅ تم إضافة ${points} نقطة لـ ${clients[clientId].name}`, 'success');
+        }
+        
+        function redeemDiscount() {
+            const clientId = document.getElementById('redeem-client-select').value;
+            
+            if (!clientId) {
+                showNotification('❌ اختر عميل أولاً', 'error');
+                return;
+            }
+            
+            const client = clients[clientId];
+            if (client.points < DISCOUNT_THRESHOLD) {
+                showNotification(`❌ العميل يملك ${client.points} نقطة فقط. يحتاج ${DISCOUNT_THRESHOLD} نقطة`, 'error');
+                return;
+            }
+            
+            client.points -= DISCOUNT_THRESHOLD;
+            client.history.push({
+                action: 'استبدال خصم 50%',
+                points: DISCOUNT_THRESHOLD,
+                type: 'redeem',
+                date: new Date().toLocaleString('ar-TN')
+            });
+            
+            saveData();
+            updateAdminPanel();
+            
+            if (currentClient === clientId) {
+                showClientCard();
+            }
+            
+            document.getElementById('redeem-client-select').value = '';
+            document.getElementById('redeem-info').style.display = 'none';
+            showNotification(`🎉 تم استبدال خصم 50% لـ ${client.name}!`, 'success');
+        }
+        
+        function saveData() {
+            localStorage.setItem('nails_feriyelle_clients', JSON.stringify(clients));
+        }
+        
+        function showNotification(message, type) {
+            const notif = document.getElementById('notification');
+            notif.textContent = message;
+            notif.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notif.classList.remove('show');
+            }, 3000);
+        }
+        
+        function closeModal() {
+            document.getElementById('scan-modal').classList.remove('active');
+        }
+    </script>
+</body>
+</html>
